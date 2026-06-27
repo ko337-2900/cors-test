@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="UTF-8"><title>ODPT詳細テスト</title></head>
+<body><h2>ODPT GTFS-Realtime 詳細テスト</h2>
+<input id="token" placeholder="consumerKey" style="width:100%">
+<button id="run">テスト開始</button><pre id="log"></pre>
+<script>
+const log=document.getElementById('log');
+const p=t=>log.textContent+=t+"\n";
+run.onclick=async()=>{
+const token=document.getElementById('token').value.trim();
+const url=`https://api.odpt.org/api/v4/gtfs/realtime/SeibuBus_trip_update?acl:consumerKey=${encodeURIComponent(token)}`;
+try{
+const r=await fetch(url);
+p(`Status: ${r.status} ${r.statusText}`);
+p(`Type: ${r.type}`);
+r.headers.forEach((v,k)=>p(`${k}: ${v}`));
+const b=await r.arrayBuffer();
+p(`Bytes: ${b.byteLength}`);
+p(new TextDecoder().decode(b)||"(binary/empty)");
+}catch(e){p(String(e));}
+}
+</script></body></html>
